@@ -9,6 +9,10 @@ echo "Starting Open5GS installation at $(date)"
 apt-get update
 apt-get upgrade -y
 
+# Install MongoDB for the WebUI
+echo "Installing MongoDB for WebUI..."
+apt-get install -y mongodb
+
 # Install dependencies
 echo "Installing dependencies..."
 apt-get install -y software-properties-common
@@ -18,10 +22,6 @@ apt-get update
 # Install Open5GS core packages
 echo "Installing Open5GS core packages..."
 apt-get install -y open5gs
-
-# Install MongoDB for the WebUI
-echo "Installing MongoDB for WebUI..."
-apt-get install -y mongodb
 
 # Install Node.js for the WebUI
 echo "Installing Node.js dependencies..."
