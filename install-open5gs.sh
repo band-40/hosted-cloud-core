@@ -75,6 +75,45 @@ systemctl restart open5gs-webui
 echo "Installing StrongSwan..."
 apt-get install -y strongswan strongswan-pki
 
+# Configure StrongSwan
+echo "Configuring StrongSwan..."
+# Create secrets file
+cat > /etc/ipsec.secrets << EOF
+# /etc/ipsec.secrets
+# This file contains the PSK for the enb.
+%any : PSK "amateuramateuramateur"
+EOF
+chmod 600 /etc/ipsec.secrets
+
+# Create ipsec configuration
+cat > /etc/ipsec.conf << EOF
+# ipsec.conf
+
+config setup
+    uniqueids=never
+    strictcrlpolicy=no
+
+conn %default
+    keyexchange=ikev2
+    keyingtries=1
+
+conn roadwarrior
+    auto=add
+    left=0.0.0.0
+    leftid=am1
+    leftsubnet=8.8.8.8/32
+    right=%any
+    rightid=%any
+    rightsourceip=10.99.0.0/24
+    type=tunnel
+    leftauth=psk
+    rightauth=psk
+EOF
+
+# Restart StrongSwan
+systemctl restart strongswan
+systemctl enable strongswan
+
 # Configure UFW
 echo "Configuring UFW..."
 apt-get install -y ufw
