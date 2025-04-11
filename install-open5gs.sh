@@ -73,7 +73,7 @@ systemctl restart open5gs-webui
 
 # Install StrongSwan
 echo "Installing StrongSwan..."
-apt-get install -y strongswan strongswan-pki
+apt-get install -y strongswan strongswan-pki charon-systemd
 
 # Configure StrongSwan
 echo "Configuring StrongSwan..."

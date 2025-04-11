@@ -9,13 +9,6 @@ packages:
   - git
   - curl
 
-# Create a user
-users:
-  - name: epcuser
-    groups: sudo
-    shell: /bin/bash
-    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-
 # Run commands on first boot
 runcmd:
   - git clone https://github.com/band-40/hosted-cloud-core.git /tmp/hosted-cloud-core
