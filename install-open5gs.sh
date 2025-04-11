@@ -46,6 +46,19 @@ apt-get install -y nodejs
 echo "Installing Open5GS WebUI..."
 curl -fsSL https://open5gs.org/open5gs/assets/webui/install | bash -
 
+# Install StrongSwan
+echo "Installing StrongSwan..."
+apt-get install -y strongswan strongswan-pki
+
+# Configure UFW
+echo "Configuring UFW..."
+apt-get install -y ufw
+ufw allow 80/tcp
+ufw allow 443/tcp
+ufw allow 500/udp
+ufw allow 4500/udp
+ufw --force enable
+
 # Enable Open5GS services
 for SERVICE in nrf amf smf upf ausf udm pcf nssf bsf udr; do
     systemctl enable open5gs-${SERVICE}d
