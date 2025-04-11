@@ -46,6 +46,14 @@ apt-get install -y nodejs
 echo "Installing Open5GS WebUI..."
 curl -fsSL https://open5gs.org/open5gs/assets/webui/install | bash -
 
+# Modify the WebUI service to listen on all interfaces
+echo "Configuring WebUI to listen on all interfaces (0.0.0.0)..."
+sed -i '/^\[Service\]/a Environment=HOSTNAME=0.0.0.0' /lib/systemd/system/open5gs-webui.service
+
+# Reload systemd to recognize changes and restart WebUI
+systemctl daemon-reload
+systemctl restart open5gs-webui
+
 # Install StrongSwan
 echo "Installing StrongSwan..."
 apt-get install -y strongswan strongswan-pki
@@ -54,6 +62,7 @@ apt-get install -y strongswan strongswan-pki
 echo "Configuring UFW..."
 apt-get install -y ufw
 ufw allow 80/tcp
+ufw allow 9999/tcp
 ufw allow 443/tcp
 ufw allow 500/udp
 ufw allow 4500/udp
