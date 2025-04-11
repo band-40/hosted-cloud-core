@@ -1,0 +1,49 @@
+#cloud-config
+
+# Update and upgrade packages
+package_update: true
+package_upgrade: true
+
+# Install essential packages
+packages:
+  - nginx
+  - git
+  - curl
+  - wget
+
+# Create a user
+users:
+  - name: epcuser
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+
+# Write files
+write_files:
+  - path: /home/epcuser/welcome.sh
+    permissions: '0755'
+    content: |
+      #!/bin/bash
+      echo "Welcome to cloud-epc service!"
+      echo "System initialization completed at $(date)"
+      echo "-------------------------------------"
+      echo "System information:"
+      echo "-------------------------------------"
+      hostnamectl
+      echo "-------------------------------------"
+      echo "IP configuration:"
+      df -h
+      echo "-------------------------------------"
+      ip addr
+      echo "-------------------------------------"
+      echo "Open5GS WebUI is available at http://$(hostname -I | awk '{print $1}'):3000"
+      echo "Default WebUI credentials: admin / 1423"
+
+# Run commands on first boot
+runcmd:
+  - systemctl start nginx
+  - systemctl enable nginx
+  - wget -O /tmp/install-open5gs.sh https://raw.githubusercontent.com/YOUR_USERNAME/cloud-epc/main/install-open5gs.sh
+  - chmod +x /tmp/install-open5gs.sh
+  - /tmp/install-open5gs.sh > /var/log/open5gs-install.log 2>&1
+  - /home/epcuser/welcome.sh > /home/epcuser/init_complete.log 
