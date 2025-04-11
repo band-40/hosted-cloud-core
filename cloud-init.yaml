@@ -4,12 +4,10 @@
 package_update: true
 package_upgrade: true
 
-# Install essential packages
+# Install minimal required packages
 packages:
-  - nginx
   - git
   - curl
-  - wget
 
 # Create a user
 users:
@@ -18,88 +16,8 @@ users:
     shell: /bin/bash
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
 
-# Write files
-write_files:
-  - path: /home/epcuser/welcome.sh
-    permissions: '0755'
-    content: |
-      #!/bin/bash
-      echo "Welcome to cloud-epc service!"
-      echo "System initialization completed at $(date)"
-      echo "-------------------------------------"
-      echo "System information:"
-      echo "-------------------------------------"
-      hostnamectl
-      echo "-------------------------------------"
-      echo "IP configuration:"
-      df -h
-      echo "-------------------------------------"
-      ip addr
-      echo "-------------------------------------"
-      echo "Open5GS WebUI is available at http://$(hostname -I | awk '{print $1}'):9999"
-      echo "Default WebUI credentials: admin / 1423"
-  - path: /var/www/html/index.html
-    permissions: '0644'
-    content: |
-      <!DOCTYPE html>
-      <html>
-      <head>
-          <title>Open5GS Status</title>
-          <style>
-              body {
-                  font-family: Arial, sans-serif;
-                  max-width: 800px;
-                  margin: 0 auto;
-                  padding: 20px;
-                  text-align: center;
-              }
-              .status {
-                  margin-top: 50px;
-                  padding: 20px;
-                  border: 1px solid #ddd;
-                  border-radius: 5px;
-              }
-              .link {
-                  display: inline-block;
-                  margin-top: 20px;
-                  padding: 10px 20px;
-                  background-color: #007bff;
-                  color: white;
-                  text-decoration: none;
-                  border-radius: 5px;
-              }
-              .link:hover {
-                  background-color: #0056b3;
-              }
-          </style>
-      </head>
-      <body>
-          <div class="status">
-              <h1>Open5GS Status</h1>
-              <p>Open5GS has been successfully installed on this server.</p>
-              <a href="http://$(hostname -I | awk '{print $1}'):9999" class="link">Access Dashboard</a>
-          </div>
-      </body>
-      </html>
-  - path: /etc/nginx/sites-available/default
-    permissions: '0644'
-    content: |
-      server {
-          listen 80;
-          server_name _;
-          
-          location / {
-              root /var/www/html;
-              index index.html;
-          }
-      }
-
 # Run commands on first boot
 runcmd:
-  - systemctl start nginx
-  - systemctl enable nginx
-  - wget -O /tmp/install-open5gs.sh https://raw.githubusercontent.com/band-40/hosted-cloud-core/main/install-open5gs.sh
-  - chmod +x /tmp/install-open5gs.sh
-  - /tmp/install-open5gs.sh > /var/log/open5gs-install.log 2>&1
-  - /home/epcuser/welcome.sh > /home/epcuser/init_complete.log
-  - systemctl restart nginx 
+  - git clone https://github.com/band-40/hosted-cloud-core.git /tmp/hosted-cloud-core
+  - chmod +x /tmp/hosted-cloud-core/install-open5gs.sh
+  - /tmp/hosted-cloud-core/install-open5gs.sh > /var/log/open5gs-install.log 2>&1 

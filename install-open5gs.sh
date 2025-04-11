@@ -4,10 +4,27 @@
 set -e
 
 echo "Starting Open5GS installation at $(date)"
+REPO_DIR="/tmp/hosted-cloud-core"
 
 # Update repositories and packages
 apt-get update
 apt-get upgrade -y
+
+# Install required packages
+apt-get install -y nginx wget
+
+# Setup welcome script
+# cp ${REPO_DIR}/welcome.sh /home/epcuser/welcome.sh
+# chmod 755 /home/epcuser/welcome.sh
+
+# Setup web content
+mkdir -p /var/www/html
+cp ${REPO_DIR}/index.html /var/www/html/index.html
+chmod 644 /var/www/html/index.html
+
+# Setup nginx configuration
+cp ${REPO_DIR}/nginx.conf /etc/nginx/sites-available/default
+chmod 644 /etc/nginx/sites-available/default
 
 # Install MongoDB for the WebUI
 echo "Installing MongoDB for WebUI..."
@@ -73,6 +90,13 @@ for SERVICE in nrf amf smf upf ausf udm pcf nssf bsf udr; do
     systemctl enable open5gs-${SERVICE}d
     systemctl restart open5gs-${SERVICE}d
 done
+
+# Start and enable nginx
+systemctl start nginx
+systemctl enable nginx
+
+# Run welcome script
+# /home/epcuser/welcome.sh > /home/epcuser/init_complete.log
 
 echo "Open5GS installation completed at $(date)"
 echo "WebUI is available at http://$(hostname -I | awk '{print $1}'):3000"

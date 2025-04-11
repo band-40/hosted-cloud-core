@@ -34,7 +34,16 @@
     <div class="status">
         <h1>Open5GS Status</h1>
         <p>Open5GS has been successfully installed on this server.</p>
-        <a href="/open5gs-webui/" class="link">Access Dashboard</a>
+        <a id="webui-link" href="#" class="link">Access Dashboard</a>
     </div>
+
+    <script>
+        // Get the current hostname and set the correct WebUI link
+        document.addEventListener('DOMContentLoaded', function() {
+            const hostname = window.location.hostname;
+            const webuiLink = document.getElementById('webui-link');
+            webuiLink.href = `http://${hostname}:9999`;
+        });
+    </script>
 </body>
 </html> 

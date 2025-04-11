@@ -1,4 +1,4 @@
-# Cloud-EPC
+# Hosted Cloud Core
 
 Cloud-init configuration for easy provisioning of Open5GS-based EPC/5GC virtual machines.
 
