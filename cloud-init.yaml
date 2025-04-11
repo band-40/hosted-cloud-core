@@ -36,7 +36,7 @@ write_files:
       echo "-------------------------------------"
       ip addr
       echo "-------------------------------------"
-      echo "Open5GS WebUI is available at http://$(hostname -I | awk '{print $1}')/open5gs-webui"
+      echo "Open5GS WebUI is available at http://$(hostname -I | awk '{print $1}'):9999"
       echo "Default WebUI credentials: admin / 1423"
   - path: /var/www/html/index.html
     permissions: '0644'
@@ -77,7 +77,7 @@ write_files:
           <div class="status">
               <h1>Open5GS Status</h1>
               <p>Open5GS has been successfully installed on this server.</p>
-              <a href="/open5gs-webui" class="link">Access Dashboard</a>
+              <a href="http://$(hostname -I | awk '{print $1}'):9999" class="link">Access Dashboard</a>
           </div>
       </body>
       </html>
@@ -87,14 +87,10 @@ write_files:
       server {
           listen 80;
           server_name _;
-
-          # Handle all other paths by proxying to Open5GS WebUI
+          
           location / {
-              proxy_pass http://localhost:9999/;
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header X-Forwarded-Proto $scheme;
+              root /var/www/html;
+              index index.html;
           }
       }
 
