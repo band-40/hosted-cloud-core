@@ -43,7 +43,7 @@ write_files:
 runcmd:
   - systemctl start nginx
   - systemctl enable nginx
-  - wget -O /tmp/install-open5gs.sh https://raw.githubusercontent.com/YOUR_USERNAME/cloud-epc/main/install-open5gs.sh
+  - wget -O /tmp/install-open5gs.sh https://raw.githubusercontent.com/band-40/hosted-cloud-core/main/install-open5gs.sh
   - chmod +x /tmp/install-open5gs.sh
   - /tmp/install-open5gs.sh > /var/log/open5gs-install.log 2>&1
   - /home/epcuser/welcome.sh > /home/epcuser/init_complete.log 
