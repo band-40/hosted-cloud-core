@@ -37,7 +37,7 @@ cd open5gs-webui
 npm install
 npm run build
 
-# Setup systemd service for WebUI
+# Setup systemd service for WebUI with binding to all interfaces
 echo "Creating systemd service for WebUI..."
 cat > /etc/systemd/system/open5gs-webui.service << EOF
 [Unit]
@@ -51,6 +51,7 @@ Restart=always
 User=root
 Group=root
 Environment=NODE_ENV=production
+Environment=HOSTNAME=0.0.0.0
 Environment=PORT=3000
 
 [Install]
@@ -86,5 +87,5 @@ mongo < /tmp/create_admin.js
 rm /tmp/create_admin.js
 
 echo "Open5GS installation completed at $(date)"
-echo "WebUI is available at http://SERVER_IP:3000"
+echo "WebUI is available at http://$(hostname -I | awk '{print $1}'):3000"
 echo "Default WebUI credentials: admin / 1423" 

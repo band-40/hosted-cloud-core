@@ -46,3 +46,18 @@ Complete the VM creation process according to your cloud provider's instructions
 ### Step 6: Access Open5GS WebUI
 
 Once the VM is ready, you can access the Open5GS WebUI at:
+
+```
+http://YOUR_VM_IP:3000
+```
+
+Default login credentials:
+- Username: admin
+- Password: 1423
+
+## Open5GS Components
+
+This installation includes:
+- Core Network Functions (NRF, AMF, SMF, UPF, AUSF, UDM, PCF, NSSF, BSF, UDR)
+- WebUI for administration
+- MongoDB for subscriber database
