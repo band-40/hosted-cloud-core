@@ -11,7 +11,20 @@ apt-get upgrade -y
 
 # Install MongoDB for the WebUI
 echo "Installing MongoDB for WebUI..."
-apt-get install -y mongodb
+# Import the public key used by the package management system
+apt-get install -y gnupg
+curl -fsSL https://pgp.mongodb.com/server-8.0.asc | gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
+
+# Create the list file for MongoDB
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/8.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+
+# Install MongoDB packages
+apt-get update
+apt-get install -y mongodb-org
+
+# Start and enable MongoDB
+systemctl start mongod
+systemctl enable mongod
 
 # Install dependencies
 echo "Installing dependencies..."
@@ -61,8 +74,6 @@ EOF
 # Enable and start services
 echo "Starting services..."
 systemctl daemon-reload
-systemctl enable mongodb
-systemctl restart mongodb
 systemctl enable open5gs-webui
 systemctl start open5gs-webui
 
