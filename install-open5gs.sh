@@ -53,6 +53,44 @@ apt-get update
 echo "Installing Open5GS core packages..."
 apt-get install -y open5gs
 
+# Get server's own IP address
+SERVER_IP=$(hostname -I | awk '{print $1}')
+
+# Configure Open5GS MME and UPF with the correct IP addresses
+echo "Configuring Open5GS with server IP: ${SERVER_IP}"
+
+# Update MME s1ap bind address
+MME_CONFIG="/etc/open5gs/mme.yaml"
+cp ${MME_CONFIG} ${MME_CONFIG}.bak
+cat ${MME_CONFIG}.bak | awk -v server_ip="${SERVER_IP}" '
+/s1ap:/ {
+  print $0;
+  getline;
+  print $0;
+  getline;
+  sub(/address: [0-9.]+/, "address: " server_ip);
+  print $0;
+  next;
+}
+{ print $0; }
+' > ${MME_CONFIG}
+
+# Update UPF gtpu bind address
+UPF_CONFIG="/etc/open5gs/upf.yaml"
+cp ${UPF_CONFIG} ${UPF_CONFIG}.bak
+cat ${UPF_CONFIG}.bak | awk -v server_ip="${SERVER_IP}" '
+/gtpu:/ {
+  print $0;
+  getline;
+  print $0;
+  getline;
+  sub(/address: [0-9.]+/, "address: " server_ip);
+  print $0;
+  next;
+}
+{ print $0; }
+' > ${UPF_CONFIG}
+
 # Install Node.js for WebUI
 echo "Installing Node.js for WebUI..."
 apt-get install -y curl
