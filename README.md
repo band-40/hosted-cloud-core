@@ -44,8 +44,8 @@ packages:
 # Run commands on first boot
 runcmd:
   - git clone https://github.com/band-40/hosted-cloud-core.git /tmp/hosted-cloud-core
-  - chmod +x /tmp/hosted-cloud-core/install-open5gs.sh
-  - /tmp/hosted-cloud-core/install-open5gs.sh > /var/log/open5gs-install.log 2>&1 
+  - chmod +x /tmp/hosted-cloud-core/install-cloud-core.sh
+  - /tmp/hosted-cloud-core/install-cloud-core.sh > /var/log/cloud-core-install.log 2>&1 
 ```
 
 
