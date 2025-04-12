@@ -175,6 +175,7 @@ done
 # Start and enable nginx
 systemctl start nginx
 systemctl enable nginx
+systemctl reload nginx
 
 # Run welcome script
 # /home/epcuser/welcome.sh > /home/epcuser/init_complete.log
