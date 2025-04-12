@@ -24,40 +24,30 @@ Sign in to your cloud provider (AWS, GCP, Azure, DigitalOcean, etc.) and start t
 ### Step 2: Provide the cloud-init script as user data
 
 When creating your virtual machine, look for a section called:
-- AWS: "User data" under the "Advanced details" section
-- GCP: "Startup script" or "Automation" section
-- Azure: "Custom data" under the "Advanced" tab
+- Vultr: "Cloud-Init" under the "Startup Scripts" section
 - DigitalOcean: "User data" under "Add initialization script"
 
-### Step 3: Copy and paste the cloud-init script
-
-Copy the contents of `cloud-init.yaml` from this repository and paste it into the user data/custom data field.
-
-### Step 4: Customize as needed
-
-Before submitting, modify the script as needed:
-- Add or remove packages according to your requirements
-- Adjust any other settings to match your needs
-
-### Step 5: Create the VM
-
-Complete the VM creation process according to your cloud provider's instructions.
-
-### Step 6: Access Open5GS WebUI
-
-Once the VM is ready, you can access the Open5GS WebUI at:
+### Step 3: Copy the following cloud-init script
 
 ```
-http://YOUR_VM_IP:3000
+#cloud-config
+
+# Update and upgrade packages
+package_update: true
+package_upgrade: true
+
+# Install minimal required packages
+packages:
+  - git
+  - curl
+
+# Run commands on first boot
+runcmd:
+  - git clone https://github.com/band-40/hosted-cloud-core.git /tmp/hosted-cloud-core
+  - chmod +x /tmp/hosted-cloud-core/install-open5gs.sh
+  - /tmp/hosted-cloud-core/install-open5gs.sh > /var/log/open5gs-install.log 2>&1 
 ```
 
-Default login credentials:
-- Username: admin
-- Password: 1423
 
-## Open5GS Components
+### Step 4: Wait for ~15mins, access the server ip http://server_ip, you should see the dashboard and settings for femto devices.
 
-This installation includes:
-- Core Network Functions (NRF, AMF, SMF, UPF, AUSF, UDM, PCF, NSSF, BSF, UDR)
-- WebUI for administration
-- MongoDB for subscriber database
