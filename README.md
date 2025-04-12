@@ -8,12 +8,11 @@ This repository provides cloud-init scripts to automatically configure and insta
 
 ## What's Included
 
-The default cloud-init configuration:
-- Updates and upgrades system packages
-- Installs essential software (nginx, git, curl, wget)
-- Creates a default user with sudo privileges
-- Installs Open5GS core network components and WebUI
-- Runs a simple initialization script
+The cloud-init configuration automatically installs and configures:
+- Open5GS core network components (4G EPC and 5G core)
+- IPsec gateway for secure eNodeB/gNodeB connections
+- Open5GS WebUI for network management
+- Web interface for easier configuration
 
 ## How to Use
 
@@ -48,6 +47,19 @@ runcmd:
   - /tmp/hosted-cloud-core/install-cloud-core.sh > /var/log/cloud-core-install.log 2>&1 
 ```
 
+### Step 4: Access your server
 
-### Step 4: Wait for ~15mins, access the server ip http://server_ip, you should see the dashboard and settings for femto devices.
+Wait approximately 15 minutes for installation to complete, then access `http://server_ip` in your browser. You should see the dashboard and settings interface for your femto devices.
+
+## Recommended Cloud Provider
+
+We recommend [Vultr](https://www.vultr.com/?ref=9746929-9J) for deploying your Open5GS instances. Vultr offers:
+
+- Global footprint with 32 data center regions
+- Affordable cloud compute options starting at $2.50/month
+- High-performance infrastructure with excellent price-to-performance ratio
+- Easy-to-use control panel for managing your instances
+- Fast deployment (under 60 seconds for many VM types)
+
+You can sign up for Vultr using our [referral link](https://www.vultr.com/?ref=9746929-9J). **New users receive a $300 credit to test the platform when signing up through this link!**
 
