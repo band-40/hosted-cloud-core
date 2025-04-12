@@ -10,11 +10,22 @@
             padding: 20px;
             text-align: center;
         }
-        .status {
-            margin-top: 50px;
+        .status, .config-guide {
+            margin-top: 30px;
             padding: 20px;
             border: 1px solid #ddd;
             border-radius: 5px;
+            text-align: left;
+        }
+        .config-section {
+            margin-top: 20px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #007bff;
+            margin-bottom: 15px;
         }
         .link {
             display: inline-block;
@@ -28,6 +39,30 @@
         .link:hover {
             background-color: #0056b3;
         }
+        .status {
+            text-align: center;
+        }
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
     </style>
 </head>
 <body>
@@ -37,12 +72,104 @@
         <a id="webui-link" href="#" class="link">Access Dashboard</a>
     </div>
 
+    <div class="config-guide">
+        <h2>Configuration Guide for Client Nodes</h2>
+        
+        <div class="config-section">
+            <h3>Quick Setting</h3>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>MME IP</td>
+                    <td><span class="hostname-placeholder">{hostname}</span></td>
+                </tr>
+                <tr>
+                    <td>TAC</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>PLMN</td>
+                    <td>99970</td>
+                </tr>
+                <tr>
+                    <td>Channel bandwidth(MHz)</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td>EARFCN</td>
+                    <td>38700</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="config-section">
+            <h3>IPSec Setting</h3>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>leftAuth</td>
+                    <td>psk</td>
+                </tr>
+                <tr>
+                    <td>rightAuth</td>
+                    <td>psk</td>
+                </tr>
+                <tr>
+                    <td>Gateway</td>
+                    <td><span class="hostname-placeholder">{hostname}</span></td>
+                </tr>
+                <tr>
+                    <td>rightSubnet</td>
+                    <td>0.0.0.0/0</td>
+                </tr>
+                <tr>
+                    <td>leftId</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>rightId</td>
+                    <td>am1</td>
+                </tr>
+                <tr>
+                    <td>secretKey</td>
+                    <td>amateuramateuramateur</td>
+                </tr>
+                <tr>
+                    <td>leftSourceIp</td>
+                    <td>%config</td>
+                </tr>
+                <tr>
+                    <td>leftSubnet</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>fragmentation</td>
+                    <td>yes</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
     <script>
-        // Get the current hostname and set the correct WebUI link
+        // Get the current hostname and set the correct WebUI link and hostnames in configs
         document.addEventListener('DOMContentLoaded', function() {
             const hostname = window.location.hostname;
+            
+            // Set the WebUI link
             const webuiLink = document.getElementById('webui-link');
             webuiLink.href = `http://${hostname}:8888`;
+            
+            // Replace all hostname placeholders in the configuration
+            const hostnameElements = document.querySelectorAll('.hostname-placeholder');
+            hostnameElements.forEach(element => {
+                element.textContent = hostname;
+            });
         });
     </script>
 </body>
