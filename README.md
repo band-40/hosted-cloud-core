@@ -14,6 +14,10 @@ The cloud-init configuration automatically installs and configures:
 - Open5GS WebUI for network management
 - Web interface for easier configuration
 
+## Compatibility
+
+The cloud-init configuration has only been tested on Ubuntu 22.04 LTS.
+
 ## How to Use
 
 ### Step 1: Access your cloud provider's console
