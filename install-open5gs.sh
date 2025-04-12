@@ -77,6 +77,9 @@ apt-get install -y strongswan strongswan-pki charon-systemd
 
 # Configure StrongSwan
 echo "Configuring StrongSwan..."
+# Get server's own IP address
+SERVER_IP=$(hostname -I | awk '{print $1}')
+
 # Create secrets file
 cat > /etc/ipsec.secrets << EOF
 # /etc/ipsec.secrets
@@ -101,7 +104,7 @@ conn roadwarrior
     auto=add
     left=0.0.0.0
     leftid=am1
-    leftsubnet=8.8.8.8/32
+    leftsubnet=${SERVER_IP}/32
     right=%any
     rightid=%any
     rightsourceip=10.99.0.0/24
@@ -118,6 +121,7 @@ systemctl enable strongswan
 echo "Configuring UFW..."
 apt-get install -y ufw
 ufw allow 80/tcp
+ufw allow 8888/tcp
 ufw allow 9999/tcp
 ufw allow 443/tcp
 ufw allow 500/udp
@@ -138,5 +142,5 @@ systemctl enable nginx
 # /home/epcuser/welcome.sh > /home/epcuser/init_complete.log
 
 echo "Open5GS installation completed at $(date)"
-echo "WebUI is available at http://$(hostname -I | awk '{print $1}'):3000"
+echo "WebUI is available at http://$(hostname -I | awk '{print $1}')"
 echo "Default WebUI credentials: admin / 1423" 
