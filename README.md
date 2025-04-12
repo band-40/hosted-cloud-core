@@ -24,8 +24,8 @@ Sign in to your cloud provider (AWS, GCP, Azure, DigitalOcean, etc.) and start t
 ### Step 2: Provide the cloud-init script as user data
 
 When creating your virtual machine, look for a section called:
-- Vultr: "Cloud-Init" under the "Startup Scripts" section
-- DigitalOcean: "User data" under "Add initialization script"
+- Vultr: "Cloud-Init User-Data" under the "Additional Features" section
+<!-- - DigitalOcean: "User data" under "Add initialization script" -->
 
 ### Step 3: Copy the following cloud-init script
 
